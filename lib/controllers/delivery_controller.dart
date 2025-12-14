@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, unused_element
 
 import 'dart:async';
 import 'dart:io';
@@ -16,6 +16,7 @@ import 'package:laundry3b1titik0/models/weather_model.dart';
 import 'package:laundry3b1titik0/models/forecast_model.dart';
 import 'package:laundry3b1titik0/services/supabase_service.dart';
 import 'package:laundry3b1titik0/screens/task_detail_screen.dart'; // Halaman Baru
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class DeliveryController extends GetxController {
   // --- SERVICE ---
@@ -96,6 +97,24 @@ class DeliveryController extends GetxController {
             _updatePolyline();
           }
         });
+  }
+
+  Future<void> _updateCourierLocationToDb(Position position) async {
+    try {
+      // Asumsi: Admin yang login menggunakan ID Kurir 1.
+      // Di aplikasi real, ID ini harus diambil dari profil user yang login.
+      const int myCourierId = 1; 
+
+      await Supabase.instance.client.from('couriers').update({
+        'current_lat': position.latitude,
+        'current_lng': position.longitude,
+        'last_updated': DateTime.now().toIso8601String(),
+      }).eq('id', myCourierId);
+      
+      // print("📍 Lokasi terkirim ke DB: ${position.latitude}, ${position.longitude}");
+    } catch (e) {
+      print("⚠️ Gagal kirim lokasi ke DB: $e");
+    }
   }
 
   void _updatePolyline() {
