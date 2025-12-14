@@ -30,6 +30,8 @@ class DeliveryController extends GetxController {
   var weatherAdvice = ''.obs;
   var isWeatherLoading = true.obs;
 
+  var customMarquee = 'Selamat bekerja! Tetap semangat antar pesanan.'.obs;
+
   // --- STATE PETA & LOGISTIK ---
   var activeOrders = <Order>[].obs;
   var mapMarkers = <Marker>[].obs;
